@@ -1,10 +1,8 @@
-function muestra_numero(num)
-{
-	console.log(num);
-}
+#!/usr/bin/env node
 
-console.log("Hola que hase");
 
-for (let a = 1; a <= 10; a++){
-	muestra_numero(a);
-}
+const http = require('http');
+http.createServer(function(request, result){
+	res.write('Hola k ase');
+	res.end();
+}).listen(8080);
