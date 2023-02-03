@@ -1,10 +1,11 @@
-#!/usr/bin/env node
-
+#!/usr/bin/node
 
 const http = require('http');
-http.createServer(function(request, result){
-	res.write('Hola k ase');
-	res.end();
-});
+
+let http_server = http.createServer(function(request, result)){
+	console.log("alguien se conecta");
+	result.write('hola k ase');
+	result.end();
+}
 
 http_server.listen(8080);
