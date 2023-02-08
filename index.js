@@ -29,10 +29,19 @@ db_connect()
 
 let http_server = http.createServer(function(request, result)){
 	let collection = db.collection('characters');
+	collection({}).toArray().then(query => {
+		let names = [];
+		
+		for (let i = 0; i < characters.length;i++){
+			names.puch( characters[i].name );
+		}
+		
+		respones.write(JSON.stringify(query));
+		response.end();
+		
+	});
 	console.log(collection);
-	console.log("alguien se conecta");
-	result.write('hola k ase');
-	result.end();
-}
+	console.log("Alguien se conecta");
+});
 
 http_server.listen(6969);
