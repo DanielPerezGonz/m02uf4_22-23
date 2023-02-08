@@ -27,8 +27,11 @@ db_connect()
 	.then(info => console.log(info))
 	.catch(msg => console.error(msg));
 
-let http_server = http.createServer(function(request, result)){
+
+function send_characters(){
+
 	let collection = db.collection('characters');
+	
 	collection({}).toArray().then(query => {
 		let names = [];
 		
@@ -40,8 +43,49 @@ let http_server = http.createServer(function(request, result)){
 		response.end();
 		
 	});
+
 	console.log(collection);
 	console.log("Alguien se conecta");
+}
+
+function send_age(){
+
+	let collection = db.collection('characters');
+	
+	collection({}).toArray().then(query => {
+		let ages = [];
+		
+		for (let i = 0; i < characters.length;i++){
+			names.puch( characters[i].age );
+		}
+		
+		respones.write(JSON.stringify(query));
+		response.end();
+		
+	});
+
+	console.log(collection);
+	console.log("Alguien se conecta");
+}
+
+let http_server = http.createServer(function(request, result)){
+	if (request.url == "/favicon.ico"){
+		return;
+	}
+
+	console.log(request.url);
+
+	if (request.url == "/characters"){
+		send_characters(response);
+	}
+	else if (request.url == "/age"){
+		send_age(response);
+	}
+	else{
+		response.write("Pagina principal");
+		response.end();
+	}
+
 });
 
 http_server.listen(6969);
