@@ -28,7 +28,7 @@ db_connect()
 	.catch(msg => console.error(msg));
 
 
-function send_characters(){
+function send_characters(response){
 
 	let collection = db.collection('characters');
 	
@@ -43,29 +43,27 @@ function send_characters(){
 		response.end();
 		
 	});
-
-	console.log(collection);
-	console.log("Alguien se conecta");
 }
 
-function send_age(){
+function send_age(response, url){
+
+	if (url.length < 3){
+		response.write("ERROR: Edad Erronea");
+		response.end();
+		return;
+	}
 
 	let collection = db.collection('characters');
-	
-	collection({}).toArray().then(query => {
-		let ages = [];
-		
-		for (let i = 0; i < characters.length;i++){
-			names.puch( characters[i].age );
-		}
+
+	collection.find({"name":url[2]}).toArray().then(query => {
+		let data = {
+			age: character.age
+		};
 		
 		respones.write(JSON.stringify(query));
 		response.end();
 		
 	});
-
-	console.log(collection);
-	console.log("Alguien se conecta");
 }
 
 let http_server = http.createServer(function(request, result)){
@@ -73,18 +71,25 @@ let http_server = http.createServer(function(request, result)){
 		return;
 	}
 
-	console.log(request.url);
+	let url = request.url.split("/");
 
-	if (request.url == "/characters"){
-		send_characters(response);
+	switch(url[1]){
+		case "characters":
+			send_characters(response);
+			break;
+		case "age":
+			send_age(response, url);
+			break;
+
+		default:
+			response.write("Pagina principal");
+			response.end();
+			break;
+		
+		
 	}
-	else if (request.url == "/age"){
-		send_age(response);
-	}
-	else{
-		response.write("Pagina principal");
-		response.end();
-	}
+
+	console.log(request.url);
 
 });
 
