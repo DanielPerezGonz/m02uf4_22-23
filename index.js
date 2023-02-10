@@ -1,8 +1,8 @@
 #!/usr/bin/node
 
 const http = require('http');
-
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
 
 //connection URL
 cont url = 'mongodb://127.0.0.1:27017';
@@ -85,11 +85,21 @@ let http_server = http.createServer(function(request, result)){
 			break;
 
 		default:
-			response.write("Pagina principal");
-			response.end();
-			break;
-		
-		
+			fs.readFile("index.html", function(err, data){ 
+				if (err){
+					console.error(err);
+					response.writeHead(404, {'Content-Type':'text/html'});
+					respones.write ("Error 404: el archivo no esta en esta castillo");
+					response.end();
+
+					return;
+				}
+
+				response.writeHead(200, {'Content-Type':'text/html'});
+
+				response.write("Pagina principal");
+				response.end();
+			});
 	}
 
 	console.log(request.url);
