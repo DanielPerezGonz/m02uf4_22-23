@@ -55,12 +55,15 @@ function send_age(response, url){
 
 	let collection = db.collection('characters');
 
-	collection.find({"name":url[2]}).toArray().then(query => {
-		let data = {
-			age: character.age
-		};
+	collection.findOne({"name":url[2]},{"age"}).project({_id:0,age:1}).toArray().then(character => {
 		
-		respones.write(JSON.stringify(query));
+		if (character.length == 0){
+			response.write("ERROR: Introduce un personaje");
+			response.end();
+			return;
+		}
+		
+		respones.write(JSON.stringify(character[0]));
 		response.end();
 		
 	});
