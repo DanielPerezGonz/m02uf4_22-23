@@ -22,7 +22,7 @@
 			</nav>
 
 		</header>
-		<main>
+		<main id="container">
 			<article>
 
 				<h2>Articulo</h2>
@@ -40,7 +40,23 @@
 			<script>
 
 				document.getElementById("footer-year").innerHTML = new Date().getFullYear();
-
+				
+				function getCharacters ()
+				{
+					let characters;
+					
+					fetch("http//10.40.2.46:6969/characters")
+						.then(response => response.json())
+						.then(characters => {
+					
+					let list = "<ul>";
+					for (let i = 0; i < characters.length; i++){
+						list`+= "<li>"+characters[i]+"</i>";
+					}
+					list += "</ul>";
+					
+					document.getElementById("container").innerHTML = list;
+				});
 			</script>
 
 		</footer>
