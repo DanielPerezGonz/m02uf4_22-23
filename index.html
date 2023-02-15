@@ -43,20 +43,35 @@
 				
 				function getCharacters ()
 				{
-					let characters;
-					
 					fetch("http//10.40.2.46:6969/characters")
 						.then(response => response.json())
 						.then(characters => {
 					
-					let list = "<ul>";
-					for (let i = 0; i < characters.length; i++){
-						list`+= "<li>"+characters[i]+"</i>";
-					}
-					list += "</ul>";
+						let list = "<ul>";
+						for(let i = 0; i < characters.length; i++){
+							list`+= "<li>"+characters[i]+"</i>";
+						}
+						list += "</ul>";
 					
-					document.getElementById("container").innerHTML = list;
-				});
+						document.getElementById("container").innerHTML = list;
+					});
+				}
+				
+				function getItems ()
+				{
+					fetch("http//10.40.2.46:6969/items")
+						.then(response => response.json())
+						.then(items => {
+					
+						let list = "<ul>";
+						for(let i = 0; i < characters.length; i++){
+							list`+= "<li>"+items[i]+"</i>";
+						}
+						list += "</ul>";
+					
+						document.getElementById("container").innerHTML = list;
+					});
+				}
 			</script>
 
 		</footer>

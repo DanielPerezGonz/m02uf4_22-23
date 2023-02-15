@@ -36,7 +36,7 @@ function send_characters(response){
 		let names = [];
 		
 		for (let i = 0; i < characters.length;i++){
-			names.puch( characters[i].name );
+			names.push( characters[i].name );
 		}
 		
 		respones.write(JSON.stringify(query));
@@ -69,6 +69,23 @@ function send_age(response, url){
 	});
 }
 
+function send_items(response){
+
+	let collection = db.collection('items');
+	
+	collection({}).toArray().then(query => {
+		let names = [];
+		
+		for (let i = 0; i < items.length;i++){
+			names.push( items[i].item );
+		}
+		
+		respones.write(JSON.stringify(query));
+		response.end();
+		
+	});
+}
+
 let http_server = http.createServer(function(request, result)){
 	if (request.url == "/favicon.ico"){
 		return;
@@ -82,6 +99,9 @@ let http_server = http.createServer(function(request, result)){
 			break;
 		case "age":
 			send_age(response, url);
+			break;
+		case "items":
+			send_items(response);
 			break;
 
 		default:
