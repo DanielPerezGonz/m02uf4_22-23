@@ -39,7 +39,7 @@ function send_characters(response){
 			names.push( characters[i].name );
 		}
 		
-		respones.write(JSON.stringify(query));
+		response.write(JSON.stringify(query));
 		response.end();
 		
 	});
@@ -63,14 +63,51 @@ function send_age(response, url){
 			return;
 		}
 		
-		respones.write(JSON.stringify(character[0]));
+		response.write(JSON.stringify(character[0]));
 		response.end();
 		
 	});
 }
 
-function send_items(response){
+function send_character_items(response, url){
+	let name = url[2].trim;
+	if (name == ""){
+		response.write("ERROR: URL mal formada");
+		response.end();
+		
+		return;
+	}
+	
+	let collection = db.collection('characters');
+	collection.find({"name":name}).toArray().then(character => {
+		if (character.length != 1){
+			response.write("ERROR: el personaje "+name+" no existe");
+			response.end();
+			
+			return;
+		}
+		
+		let id = character[0].id_character;
+		let collection = db.collection('characters_items');
+		collection.find ({"id_character":id}).toArray().then(ids => {
+			if (ids.length == 0){
+				response.write("[]");
+				response.end();
+				
+				return;
+			}
+			
+		}
+	})
+}
 
+function send_items(response, url){
+	if (url.length >= 3){
+		send_character_items (response, url);
+		
+		return;
+	}
+	
 	let collection = db.collection('items');
 	
 	collection({}).toArray().then(query => {
@@ -80,7 +117,7 @@ function send_items(response){
 			names.push( items[i].item );
 		}
 		
-		respones.write(JSON.stringify(query));
+		response.write(JSON.stringify(query));
 		response.end();
 		
 	});
@@ -101,7 +138,7 @@ let http_server = http.createServer(function(request, result)){
 			send_age(response, url);
 			break;
 		case "items":
-			send_items(response);
+			send_items(response, url);
 			break;
 
 		default:
@@ -109,7 +146,7 @@ let http_server = http.createServer(function(request, result)){
 				if (err){
 					console.error(err);
 					response.writeHead(404, {'Content-Type':'text/html'});
-					respones.write ("Error 404: el archivo no esta en esta castillo");
+					response.write ("Error 404: el archivo no esta en esta castillo");
 					response.end();
 
 					return;
