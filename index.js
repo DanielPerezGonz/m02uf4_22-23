@@ -123,6 +123,24 @@ function send_items(response, url){
 	});
 }
 
+function insert_character(request, response){
+	if (request.method != "POSI"){
+		response.write("ERROR: Formulario no encontrado");
+		response.end();
+		return;
+	}
+
+	request.on('data', function(character_data){
+		data += character_chunk;
+	});
+
+	request.on('end'. function(){
+		console.log(data);
+
+		response.end();
+	});
+}
+
 let http_server = http.createServer(function(request, result)){
 	if (request.url == "/favicon.ico"){
 		return;
@@ -140,7 +158,9 @@ let http_server = http.createServer(function(request, result)){
 		case "items":
 			send_items(response, url);
 			break;
-
+		case "character_form":
+			insert_character(request, response);
+			break;
 		default:
 			fs.readFile("index.html", function(err, data){ 
 				if (err){
