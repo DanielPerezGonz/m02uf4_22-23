@@ -1,93 +1,100 @@
 <!DOCTYPE html>
+
 <html>
 	<head>
-
-		<title>Pagina de prueba</title>
-		<h1>Daniel Perez Gonzalez, pagina del Pastafarismo</h1>
-
+		<meta charset="UTF-8"/>
+		<title>MongoEnti</title>
 	</head>
+	
 	<body>
-
+		
 		<header>
-
+			<h1>MongoEnti</h1>
 			<nav>
-
-				<ul>
-
-					<li><button id="characters-button">Personajes</button></li>
-					<li><button id="menu-hobbies">Objetos</button></li>
-					<li><button id="weapons-button">Armas</button></li>
-
-				</ul>
+				<form>
+					<ul>
+						<li><button id="characters-button" onClick="getCharacters(); return false;">Personajes</button></li> 
+						<li><button id="items-button" onClick="getItems(); return false;">Objetos</button></li>
+						<li><button id="weapons-button" onClick="getWeapons(); return false;">Armas</button></li>
+					</ul>
+				</form>
 			</nav>
-
 		</header>
-		<main id="container">
-			<form action="/character_form" method="POST">
-				<h2>Añadir Personaje</h2>
 
-				<p><label for ="character-name">Nombre</label>
-				<input type="text" name="name" id="character_name"/></p>
-				
-				<p><label for="character-age">Edad</label>
-				<input type="number" age="age" id="character_age"/></p>
-
-
-			</form>
+		<main id="contents-main">
 			
-			<article>
-
-				<h2>Articulo</h2>
-
-			</article>
-			<aside>
-
-				<h2>Lateral</h2>
-
-			</aside>
 		</main>
-		<footer>
-
-			<p>Daniel Perez (c) <span id="footer-year">2022</span></p>
-			<script>
-
-				document.getElementById("footer-year").innerHTML = new Date().getFullYear();
+			<form action="/character_form" method="POST">
+				<h2>Añadir personaje</h2>
+				<p><label for="character-name">Nombre</label>
+				<input type="text" name="name" id="character-name" /></p>
+				<p><label for="character-age">Edad</label>
+                <input type="number" name="age" min="0" id="character-age" /></p>
+				<p><input type="submit" value="¡Añadir personaje!" /></p>
 				
-				function getCharacters ()
-				{
-					fetch("http//10.40.2.46:6969/characters")
-						.then(response => response.json())
-						.then(characters => {
-					
-						let list = "<ul>";
-						for(let i = 0; i < characters.length; i++){
-							list`+= "<li>"+characters[i]+"</i>";
-						}
-						list += "</ul>";
-					
-						document.getElementById("container").innerHTML = list;
-					});
-				}
+			</form>
+
+		<script>
+			function getCharacter(){
 				
-				function getItems ()
-				{
-					fetch("http//10.40.2.46:6969/items")
-						.then(response => response.json())
-						.then(items => {
-					
-						let list = "<ul>";
-						for(let i = 0; i < characters.length; i++){
-							list`+= "<li>"+items[i]+"</i>";
-						}
-						list += "</ul>";
-					
-						document.getElementById("container").innerHTML = list;
-					});
+				fetch("/character")
+					.then(response => response.json())
+					.then(character => {
+
+				
+				let list = "<ul>";
+				for (let i = 0; i < character.length; i++){
+				
+					list += "<li>" + character[i] + "</li>";
+				
 				}
-			</script>
+		
+				list += "</ul>"
+				document.getElementById("contents-main").innerHTML = list;
+				});
 
-		</footer>
+			}
 
+			function getitems(){
+				
+				fetch("/items")
+					.then(respone => response.json())
+					.then(items => {
+
+				let list = "<ul>";
+				for (let i = 0; i < items.length; i++){
+
+					list += "<li>" + items[i] + "</li>";
+
+				}
+
+				list += "</ul>"
+				document.getElementById("contents-main").innerHTML = list;
+
+				});
+
+			}
+
+			function getWeapons (){
+				
+				fetch("/weapons")
+					.then(response => response.json())
+					.then(items => {
+
+						let list = "<ul>";
+
+						for (let i = 0; i < items.length; i++) {
+							list += "<li>" + items[i] + "</li>";
+						}
+
+						list += "</ul>";
+
+						document.getElementById("contents-main").innerHTML = list;
+
+					});
+			}
+
+
+		</script>
 	</body>
-
 </html>
