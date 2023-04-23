@@ -21,15 +21,9 @@ let collection;
 
 async function db_connect() {
 
-  // Use connect method to connect to the server
-
   await client.connect();
 
-  console.log('Connected successfully to server');
-
   db = client.db(dbName);
-
-  //const collection = db.collection('documents');
 
   return 'Conectando a la base de datos MongoDB';
 
@@ -59,35 +53,6 @@ function send_characters (response){
 	
 }
 
-function send_age(response, url){
-
-	if(url.length < 3) {
-	
-		response.write("ERROR: Edad errónea");
-		response.end();
-		
-		return;
-	} 
-
-collection = db.collection('characters');
-
-collection.find({ "name": url[2] }).project({ _id: 0, age: 1}).toArray().then(character => {
-	
-	console.log(character);
-
-	if (character.length == 0){
-		
-		response.write("ERROR: Edad errónea");
-		response.end();
-
-		return;
-
-	}
-	response.write(JSON.stringify(character[0]));
-	response.end();
-	});
-}
-
 function send_Character_Data(response, id_character) {
 
 	collection = db.collection('characters');
@@ -107,25 +72,8 @@ let http_server = http.createServer(function(request, response){
 	let url = request.url.split("/");
 	let params = request.url.split("?");
 	switch (url[1]) {
-	
-	case "age":
-		send_age(response, url);
-		break;
-
 	case "characters":
 		send_characters(response);
-		break;
-	
-	case "items":
-		send_items(response, url);
-		break;
-
-	case "weapons":
-		send_weapons(response);
-		break;
-
-	case "character_form":
-		insert_character(request, response);
 		break;
 		
 	default:
